@@ -5,9 +5,9 @@
 
 int main(void) {
    
-    lcd_init();
-    lcd_disable_blink();
-    lcd_disable_cursor(); 
+    
+
+     
 
     ADMUX = 0x43; // AVcc referencia, canal ADC3
 
