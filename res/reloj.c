@@ -1,3 +1,7 @@
+/*
+    @author: Trivi
+ */
+
 #include "reloj.h"
 
 Tiempo Hora_actual = {0, 0, 0};

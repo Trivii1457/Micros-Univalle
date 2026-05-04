@@ -43,6 +43,7 @@
 
 #include <avr/io.h>   /* Registros del micro: DDRA, PORTA, PINA, etc. */
 #include <stdint.h>   /* uint8_t                                       */
+#include <util/delay.h>
 
 /* =========================================
    1. DETECCION AUTOMATICA DEL TARGET
