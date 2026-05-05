@@ -39,7 +39,7 @@ static uint8_t esperar_estado(uint8_t estado, uint8_t max_us) {
     return 1;
 }
 
-uint8_t temp_read(uint16_t *temp, uint8_t *humidity){
+uint8_t temp_read(uint8_t *temp, uint8_t *humidity){
     uint8_t datos[5] = {0};
 
     // 1. Inicio: Pulso bajo del master por 18ms

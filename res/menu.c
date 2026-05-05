@@ -42,7 +42,7 @@ static void dibujar_reloj(void)
     uint8_t min_muestra;
     //Fila 1
     lcd_set_cursor(1, 1);
-    lcd_print("Hora: %02d:%02d:%02d", Hora_actual.horas, Hora_actual.minutos, Hora_actual.segundos);
+    lcd_printf("Hora: %02d:%02d:%02d", Hora_actual.horas, Hora_actual.minutos, Hora_actual.segundos);
 
     //Fila 2
     min_muestra =  intervalo - (Hora_actual.minutos % intervalo);
@@ -52,11 +52,11 @@ static void dibujar_reloj(void)
     }
 
     lcd_set_cursor(2, 1);
-    lcd_print("Prox muestra en: %02d min", min_muestra);
+    lcd_printf("Prox muestra en: %02d min", min_muestra);
 
     //Fila 3
     lcd_set_cursor(3, 1);
-    lcd_print("Muestras: %d de %d", numero_muestras, Max_muestras);
+    lcd_printf("Muestras: %d de %d", numero_muestras, Max_muestras);
 
     //Fila 4
     lcd_set_cursor(4, 1);
@@ -82,7 +82,7 @@ static void dibujar_dht(void)
 {
     Muestra *m;
 
-    lcd_sert_cursor(1, 1);
+    lcd_set_cursor(1, 1);
     if (numero_muestras == 0) {
         lcd_printf("No hay muestras");
     }

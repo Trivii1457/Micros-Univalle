@@ -17,7 +17,7 @@ void ADC_init(void);
 
 uint16_t LDR_read(void);
 
-uint8_t temp_read(uint16_t *temp, uint8_t *humidity);
+uint8_t temp_read(uint8_t *temp, uint8_t *humidity);
 
 
 
