@@ -31,10 +31,10 @@ uint8_t abajo(void){
     return GPIO_ReadPin(Botones_Puerto, Boton_2);
 }
 
-uint8_t izquierda(void){
+uint8_t seleccionar(void){
     return GPIO_ReadPin(Botones_Puerto, Boton_3);
 }
 
-uint8_t derecha(void){
+uint8_t volver(void){
     return GPIO_ReadPin(Botones_Puerto, Boton_4);
 }
