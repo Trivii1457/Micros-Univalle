@@ -9,7 +9,7 @@
 /*Voy a tratar de utilizar un sensor DHT11 y un fotoresistor*/
 
 #define puerto_sensores 'C'
-#define sensor_temp 0
+#define sensor_temp 2
 
 #define Canal_LDR 2 //PA2
 

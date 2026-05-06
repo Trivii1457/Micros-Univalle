@@ -1,0 +1,12 @@
+avrdude.exe -c usbasp -p m1284p -U lfuse:w:0xF7:m -U hfuse:w:0xD7:m -U efuse:w:0xFD:m 
+Error: cannot set sck period; please check for usbasp firmware update
+Processing -U lfuse:w:0xF7:m
+Reading 1 byte for lfuse from input file 0xF7
+Writing 1 byte (0xF7) to lfuse, 1 byte written, 1 verified
+Processing -U hfuse:w:0xD7:m
+Reading 1 byte for hfuse from input file 0xD7
+Writing 1 byte (0xD7) to hfuse, 1 byte written, 1 verified
+Processing -U efuse:w:0xFD:m
+Reading 1 byte for efuse from input file 0xFD
+Writing 1 byte (0xFD) to efuse, 1 byte written, 1 verified
+Avrdude done.  Thank you.

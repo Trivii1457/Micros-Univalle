@@ -16,7 +16,7 @@ Libreria para segmentar los botones del menu para la LCD
 #define Boton_4 3
 
 
-#define Botones_Puerto 'B'
+#define Botones_Puerto 'D'
 
 //Inicializae botones
 void Botones_Init(void);
