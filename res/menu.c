@@ -31,7 +31,7 @@ static const char *opciones_menu[Max_menu] = {
 };
 
 static void cambiar_estado(MenuState nuevo_estado) {
-    i2c_lcd_clear();
+    lcd_clear();
     estado = nuevo_estado;
     pantalla_sucia = 1;
     indice_vista = 0;
@@ -41,8 +41,8 @@ static void dibujar_reloj(void)
 {
     uint8_t min_muestra;
     //Fila 1
-    i2c_lcd_set_cursor(1, 1);
-    i2c_lcd_printf("Hora: %02d:%02d:%02d", Hora_actual.horas, Hora_actual.minutos, Hora_actual.segundos);
+    lcd_set_cursor(1, 1);
+    lcd_printf("Hora: %02d:%02d:%02d", Hora_actual.horas, Hora_actual.minutos, Hora_actual.segundos);
 
     //Fila 2
     min_muestra =  intervalo - (Hora_actual.minutos % intervalo);
@@ -51,29 +51,29 @@ static void dibujar_reloj(void)
         min_muestra = 0;
     }
 
-    i2c_lcd_set_cursor(2, 1);
-    i2c_lcd_printf("Prox muestra en: %02d min", min_muestra);
+    lcd_set_cursor(2, 1);
+    lcd_printf("Prox muestra en: %02d min", min_muestra);
 
     //Fila 3
-    i2c_lcd_set_cursor(3, 1);
-    i2c_lcd_printf("Muestras: %d de %d", numero_muestras, Max_muestras);
+    lcd_set_cursor(3, 1);
+    lcd_printf("Muestras: %d de %d", numero_muestras, Max_muestras);
 
     //Fila 4
-    i2c_lcd_set_cursor(4, 1);
-    i2c_lcd_printf(" [SEL] = Menu");
+    lcd_set_cursor(4, 1);
+    lcd_printf(" [SEL] = Menu");
 
 }
 
 static void dibujar_menu(void)
 { 
-    i2c_lcd_set_cursor(1, 1);
-    i2c_lcd_printf("   MENU PRINCIPAL   ");
+    lcd_set_cursor(1, 1);
+    lcd_printf("   MENU PRINCIPAL   ");
     for (uint8_t i = 0; i < Max_menu; i++) {
-        i2c_lcd_set_cursor(2 + i, 1);
+        lcd_set_cursor(2 + i, 1);
         if (i == cursor_menu) {
-            i2c_lcd_printf("> %s", opciones_menu[i]);
+            lcd_printf("> %s", opciones_menu[i]);
         } else {
-            i2c_lcd_printf("  %s", opciones_menu[i]);
+            lcd_printf("  %s", opciones_menu[i]);
         }
     }
 }
@@ -82,35 +82,35 @@ static void dibujar_dht(void)
 {
     Muestra *m;
 
-    i2c_lcd_set_cursor(1, 1);
+    lcd_set_cursor(1, 1);
     if (numero_muestras == 0) {
-        i2c_lcd_printf("No hay muestras");
+        lcd_printf("No hay muestras");
     }
-    else {i2c_lcd_printf("DHT11 %d/%d [B]=menu ", indice_vista + 1, numero_muestras);}
+    else {lcd_printf("DHT11 %d/%d [B]=menu ", indice_vista + 1, numero_muestras);}
 
     if (numero_muestras == 0)
     {
-        i2c_lcd_set_cursor(2,1);
-        i2c_lcd_printf("Aun no hay muestras");
-        i2c_lcd_set_cursor(3,1);
-        i2c_lcd_printf(" Esperar %d min ", intervalo);
-        i2c_lcd_set_cursor(4,1);
-        i2c_lcd_printf("  [BACK] = Volver   ");
+        lcd_set_cursor(2,1);
+        lcd_printf("Aun no hay muestras");
+        lcd_set_cursor(3,1);
+        lcd_printf(" Esperar %d min ", intervalo);
+        lcd_set_cursor(4,1);
+        lcd_printf("  [BACK] = Volver   ");
         return;
     }
 
     m = obtener_muestras(indice_vista);
     if (m == 0) return; //No deberia pasar, pero por las dudas. Toca como con las mujeres, toca ir precavido
     //Fila 2, Hora de la muestra
-    i2c_lcd_set_cursor(2, 1);
-    i2c_lcd_printf("Hora: %02d:%02d:%02d   ", m->Hora.horas, m->Hora.minutos, m->Hora.segundos);
+    lcd_set_cursor(2, 1);
+    lcd_printf("Hora: %02d:%02d:%02d   ", m->Hora.horas, m->Hora.minutos, m->Hora.segundos);
 
     //Fila 3, Temperatura
-    i2c_lcd_set_cursor(3, 1);
+    lcd_set_cursor(3, 1);
     if (m->lec_ok) {
-        i2c_lcd_printf("Temp: %d %%   ", m->Temperatura);
+        lcd_printf("Temp: %d %%   ", m->Temperatura);
     } else {
-        i2c_lcd_printf("Temp: --- C Error so puto   ");
+        lcd_printf("Temp: --- C Error so puto   ");
     }
 }
 
@@ -121,57 +121,57 @@ static void dibujar_ldr(void)
     Muestra *m;
     uint8_t pct_luz;
 
-    i2c_lcd_set_cursor(1, 1);
+    lcd_set_cursor(1, 1);
     if (numero_muestras == 0) {
-        i2c_lcd_printf("No hay muestras");
+        lcd_printf("No hay muestras");
     }
-    else {i2c_lcd_printf("LDR %d/%d [B]=menu ", indice_vista + 1, numero_muestras);}
+    else {lcd_printf("LDR %d/%d [B]=menu ", indice_vista + 1, numero_muestras);}
 
     if (numero_muestras == 0)
     {
-        i2c_lcd_set_cursor(2,1);
-        i2c_lcd_printf("Aun no hay muestras");
-        i2c_lcd_set_cursor(3,1);
-        i2c_lcd_printf(" Esperar %d min ", intervalo);
-        i2c_lcd_set_cursor(4,1);
-        i2c_lcd_printf("  [BACK] = Volver   ");
+        lcd_set_cursor(2,1);
+        lcd_printf("Aun no hay muestras");
+        lcd_set_cursor(3,1);
+        lcd_printf(" Esperar %d min ", intervalo);
+        lcd_set_cursor(4,1);
+        lcd_printf("  [BACK] = Volver   ");
         return;
     }
 
     m = obtener_muestras(indice_vista);
     if (m == 0) return; //No deberia pasar, pero por las dudas. Toca como con las mujeres, toca ir precavido
     //Fila 2, Hora de la muestra
-    i2c_lcd_set_cursor(2, 1);
-    i2c_lcd_printf("Hora: %02d:%02d:%02d   ", m->Hora.horas, m->Hora.minutos, m->Hora.segundos);
+    lcd_set_cursor(2, 1);
+    lcd_printf("Hora: %02d:%02d:%02d   ", m->Hora.horas, m->Hora.minutos, m->Hora.segundos);
 
     //Fila 3, LDR
-    i2c_lcd_set_cursor(3, 1);
-    i2c_lcd_printf("ADC: %4d   ", m->LDR);
+    lcd_set_cursor(3, 1);
+    lcd_printf("ADC: %4d   ", m->LDR);
 
     //Fila 4, porcentaje de luz
     pct_luz = (m->LDR * 100) / 1023;
-    i2c_lcd_set_cursor(4, 1);
-    i2c_lcd_printf("Luz: %3d %%   ", pct_luz);
+    lcd_set_cursor(4, 1);
+    lcd_printf("Luz: %3d %%   ", pct_luz);
 }
 
 
 static void dibujar_ajuste_hora(void)
 {
-    i2c_lcd_set_cursor(1, 1);
-    i2c_lcd_printf("  AJUSTAR HORA    ");
+    lcd_set_cursor(1, 1);
+    lcd_printf("  AJUSTAR HORA    ");
 
-    i2c_lcd_set_cursor(2, 1);
-    i2c_lcd_printf("Hora: %02d:%02d:%02d   ", h_temp, m_temp, s_temp);
+    lcd_set_cursor(2, 1);
+    lcd_printf("Hora: %02d:%02d:%02d   ", h_temp, m_temp, s_temp);
 
-    i2c_lcd_set_cursor(3, 1);
+    lcd_set_cursor(3, 1);
     switch (campo_ajuste) {
-        case 0: i2c_lcd_printf("    ^^              "); break;   /* bajo las horas */
-        case 1: i2c_lcd_printf("         ^^         "); break;  /* bajo los minutos */
-        case 2: i2c_lcd_printf("              ^^    "); break;  /* bajo los segundos */
+        case 0: lcd_printf("    ^^              "); break;   /* bajo las horas */
+        case 1: lcd_printf("         ^^         "); break;  /* bajo los minutos */
+        case 2: lcd_printf("              ^^    "); break;  /* bajo los segundos */
         default: break;
     }
-    i2c_lcd_set_cursor(4, 1);
-    i2c_lcd_printf("[^][v]=cambiar[S]=OK");
+    lcd_set_cursor(4, 1);
+    lcd_printf("[^][v]=cambiar[S]=OK");
     
 }
 
@@ -248,6 +248,10 @@ void menu_update(void)
                     default:
                         break;
                 }
+            }
+            if (pantalla_sucia && estado == EST_MENU) {
+                dibujar_menu();
+                pantalla_sucia = 0;
             }
             break;
         case EST_VER_DHT:

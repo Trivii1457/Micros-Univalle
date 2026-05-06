@@ -8,19 +8,26 @@
 
 
 int main(void) {
-   
-    i2c_lcd_init();
+
+    lcd_init();
+    lcd_disable_blink();
+    lcd_set_cursor(1, 1);
+    lcd_printf("   Reloj Digital    ");
+    /*
     Botones_Init();
     ADC_init();
     Reloj_Init(0,0,0);
     menu_init();
-    i2c_lcd_set_cursor(1, 1);
-    i2c_lcd_puts("   Reloj Digital    ");
-    i2c_lcd_clear();
-    _delay_ms(2000);
+    lcd_set_cursor(1, 1);
+    lcd_puts("   Reloj Digital    ");
+    lcd_clear();
+    _delay_ms(2000);*/
+    
     while (1) {
+        /*
         _delay_ms(5);
         tick_reloj(); 
+        
         
         if (muestra_pendiente_()) {
             uint8_t  temp   = 0;
@@ -35,7 +42,7 @@ int main(void) {
  
             guardar_muestra(temp, hum, ldr, dht_ok);
         }
-        menu_update();
+        menu_update();/*/
     }
 }
 

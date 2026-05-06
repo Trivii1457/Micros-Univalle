@@ -1,3 +1,4 @@
+/*
 #ifndef LCD_LIB_H_
 #define LCD_LIB_H_
 
@@ -8,18 +9,18 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-
+*/
 
 /************************************************************************/
 /* Comportamiento de RS                                                 */
 /************************************************************************/
-#define _COMMAND_      0
-#define _DATA_         1
+//#define _COMMAND_      0
+//#define _DATA_         1
 
 /************************************************************************/
 /* DEFINIR EL PUERTO DONDE SE VA CONECTAR LA LCD                        */
 /************************************************************************/
-
+/*
 #define _LCD_DDR(x, y)    GPIO_PIN_MODE_PORTA(x, y) 
 #define _LCD_PORT(x,y)    GPIO_WRITE_PORTA(x, y)
 
@@ -37,13 +38,13 @@
 /*  MODO CELAR DISPLAY:  D7 D6 D5 D4 D3 D2 D1 D0                        */
 /*                       0  0  0  0  0  0  0  1                         */
 /************************************************************************/
-#define _LCD_CLEARDISPLAY 0x01
+//#define _LCD_CLEARDISPLAY 0x01
 
 /************************************************************************/
 /*  MODO CELAR RETURN HOME:  D7 D6 D5 D4 D3 D2 D1 D0                    */
 /*                           0  0  0  0  0  0  1  0                     */
 /************************************************************************/
-#define _LCD_RETURNHOME     0x02
+//  #define _LCD_RETURNHOME     0x02
 
 /************************************************************************/
 /*      ENTRAMOS EN MODE SET:  D7 D6 D5 D4 D3 D2 D1  D0                 */
@@ -54,6 +55,7 @@
 /*		S   = 1: SHIFT ON                                               */
 /*            0: SHIFT OFF                                              */
 /************************************************************************/
+/*
 #define _LCD_ENTRYMODESET   0x04
 #define _LCD_INCREMENT      0x02
 #define _LCD_DECREMENT      0x00
@@ -71,6 +73,7 @@
 /*		B   = 1: BLINK                                                  */
 /*		      0: NO BLINK                                               */
 /************************************************************************/
+/*
 #define _LCD_DISPLAYCONTROL 0x08
 #define _LCD_DISPLAY_ON     0x04
 #define _LCD_DISPLAY_OFF    0x00
@@ -88,6 +91,8 @@
 /*		R/L = 1: shift to the right                                     */
 /*		      0: shift to the left                                      */
 /************************************************************************/
+/*
+
 #define _LCD_CURSORDISPLAYSHIFT 0x10
 #define _LCD_DISPLAY_SHIFT      0x08
 #define _LCD_CURSOR_SHIFT       0x00
@@ -105,6 +110,7 @@
 /*		F   = 1: MATRIZ 5x10                                            */
 /*		      0: MATRIZ 5x7/5x8                                         */
 /************************************************************************/
+/*
 #define _LCD_FUNTIONSET 0x20
 #define _LCD_8BITMODE   0x10
 #define _LCD_4BITMODE   0x00
@@ -120,7 +126,7 @@
 /*----------------------------------------------------------------------*/
 /*      ACG -> CGRAM ADDRESS                                            */
 /************************************************************************/
-#define _LCD_SET_CGRAM_ADDR  0x40
+//#define _LCD_SET_CGRAM_ADDR  0x40
 
 /************************************************************************/
 /*      SET DDRAM:  D7 D6  D5  D4   D3   D2   D1   D0                   */
@@ -128,12 +134,12 @@
 /*----------------------------------------------------------------------*/
 /*      ADD -> DDRAM ADDRESS                                            */
 /************************************************************************/
-#define _LCD_SET_DDRAM_ADDR  0x80
+//#define _LCD_SET_DDRAM_ADDR  0x80
 
 /************************************************************************/
 /* METODOS DE LIBRERIA                                                  */
 /************************************************************************/
-
+/*
 void lcd_init(void);
 void lcd_write(uint8_t letra);
 void lcd_command(uint8_t cmd);

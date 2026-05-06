@@ -4,7 +4,7 @@
  * Created: 12/31/2021 10:28:59 AM
  *  Author: iSebas
  */ 
-
+/*
 #include "LCD.h"
 
 static uint8_t _lcd_params;
@@ -168,3 +168,4 @@ void lcd_custom_char(uint8_t mem, uint8_t *charmap){
 	lcd_command(_LCD_SET_DDRAM_ADDR);
 	_delay_us(37);
 }
+	*/
