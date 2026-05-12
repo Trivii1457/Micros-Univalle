@@ -4,6 +4,7 @@
 #include "../lib/LCD.h"
 #include "../lib/gpio.h"
 #include <stdio.h>
+#include "big_font.h"
 
 typedef enum {
     EST_RELOJ,
@@ -18,7 +19,7 @@ static uint8_t pantalla_sucia = 1; //Cuando la pantalla necesite ser actualizada
 static uint8_t cursor_menu = 0; 
 static uint8_t indice_vista = 0;
 
-static uint8_t h_temp, m_temp, s_temp; 
+static uint8_t h_temp, m_temp; 
 static uint8_t campo_ajuste = 0; //0=horas, 1=minutos, 2=segundos
 
 static uint8_t seg_anterior = 0xFF;
@@ -37,31 +38,38 @@ static void cambiar_estado(MenuState nuevo_estado) {
     indice_vista = 0;
 }
 
+static void dibujar_digito_grande(uint8_t digito, uint8_t offset_col) {
+    if (digito > 9) return;
+    for (uint8_t r = 0; r < 4; r++) { // 4 filas de alto
+        lcd_set_cursor(r + 1, offset_col); // El offset_col es 1-based (del 1 al 20)
+        for (uint8_t c = 0; c < 3; c++) { 
+            lcd_write(big_digits[digito][r][c]);
+        }
+    }
+}
+
 static void dibujar_reloj(void)
 {
-    uint8_t min_muestra;
-    //Fila 1
-    lcd_set_cursor(1, 1);
-    lcd_printf("Hora: %02d:%02d:%02d", Hora_actual.horas, Hora_actual.minutos, Hora_actual.segundos);
+    // Mostrar HH:MM ocupando 4 líneas.
+    // Espacio en cols: (3H) + (1 space) + (3H) + (2 colons) + (3M) + (1 space) + (3M) = 16 cols
+    // Restan 4 columnas: 2 a la izquierda, 2 a la derecha.
 
-    //Fila 2
-    min_muestra =  intervalo - (Hora_actual.minutos % intervalo);
+    uint8_t h1 = Hora_actual.horas / 10;
+    uint8_t h2 = Hora_actual.horas % 10;
+    uint8_t m1 = Hora_actual.minutos / 10;
+    uint8_t m2 = Hora_actual.minutos % 10;
 
-    if (min_muestra == intervalo) {
-        min_muestra = 0;
-    }
+    lcd_clear();
 
-    lcd_set_cursor(2, 1);
-    lcd_printf("Prox muestra en: %02d min", min_muestra);
+    // Dibujar los 4 digitos
+    dibujar_digito_grande(h1, 3);
+    dibujar_digito_grande(h2, 7);
+    dibujar_digito_grande(m1, 12);
+    dibujar_digito_grande(m2, 16);
 
-    //Fila 3
-    lcd_set_cursor(3, 1);
-    lcd_printf("Muestras: %d de %d", numero_muestras, Max_muestras);
-
-    //Fila 4
-    lcd_set_cursor(4, 1);
-    lcd_printf(" [SEL] = Menu");
-
+    // Dibujar los dos puntos separadores en el centro (columnas 10 y 11, filas 2 y 3)
+    lcd_set_cursor(2, 10); lcd_write(' '); lcd_write((uint8_t)4); // Bloque como pto superior
+    lcd_set_cursor(3, 10); lcd_write(' '); lcd_write((uint8_t)4); // Bloque como pto inferior
 }
 
 static void dibujar_menu(void)
@@ -103,7 +111,7 @@ static void dibujar_dht(void)
     if (m == 0) return; //No deberia pasar, pero por las dudas. Toca como con las mujeres, toca ir precavido
     //Fila 2, Hora de la muestra
     lcd_set_cursor(2, 1);
-    lcd_printf("Hora: %02d:%02d:%02d   ", m->Hora.horas, m->Hora.minutos, m->Hora.segundos);
+    lcd_printf("Hora: %02d:%02d      ", m->Hora.horas, m->Hora.minutos);
 
     //Fila 3, Temperatura
     lcd_set_cursor(3, 1);
@@ -142,7 +150,7 @@ static void dibujar_ldr(void)
     if (m == 0) return; //No deberia pasar, pero por las dudas. Toca como con las mujeres, toca ir precavido
     //Fila 2, Hora de la muestra
     lcd_set_cursor(2, 1);
-    lcd_printf("Hora: %02d:%02d:%02d   ", m->Hora.horas, m->Hora.minutos, m->Hora.segundos);
+    lcd_printf("Hora: %02d:%02d      ", m->Hora.horas, m->Hora.minutos);
 
     //Fila 3, LDR
     lcd_set_cursor(3, 1);
@@ -161,13 +169,13 @@ static void dibujar_ajuste_hora(void)
     lcd_printf("  AJUSTAR HORA    ");
 
     lcd_set_cursor(2, 1);
-    lcd_printf("Hora: %02d:%02d:%02d   ", h_temp, m_temp, s_temp);
+    lcd_printf("Hora: %02d:%02d      ", h_temp, m_temp);
 
     lcd_set_cursor(3, 1);
     switch (campo_ajuste) {
         case 0: lcd_printf("    ^^              "); break;   /* bajo las horas */
         case 1: lcd_printf("         ^^         "); break;  /* bajo los minutos */
-        case 2: lcd_printf("              ^^    "); break;  /* bajo los segundos */
+        
         default: break;
     }
     lcd_set_cursor(4, 1);
@@ -178,6 +186,16 @@ static void dibujar_ajuste_hora(void)
 
 void  menu_init(void) 
 { 
+    // Cargar los 8 caracteres personalizados en la CGRAM del LCD
+    lcd_custom_char(0, (uint8_t *)bf_top_bar);
+    lcd_custom_char(1, (uint8_t *)bf_bot_bar);
+    lcd_custom_char(2, (uint8_t *)bf_top_right);
+    lcd_custom_char(3, (uint8_t *)bf_top_left);
+    lcd_custom_char(4, (uint8_t *)bf_solid);
+    lcd_custom_char(5, (uint8_t *)bf_mid_bot);
+    lcd_custom_char(6, (uint8_t *)bf_bot_right);
+    lcd_custom_char(7, (uint8_t *)bf_bot_left);
+
     estado = EST_RELOJ;
     pantalla_sucia = 1;
     cursor_menu = 0;
@@ -241,7 +259,7 @@ void menu_update(void)
                     case 2:
                         h_temp = Hora_actual.horas;
                         m_temp = Hora_actual.minutos;
-                        s_temp = Hora_actual.segundos;
+                        
                         campo_ajuste = 0;
                         cambiar_estado(EST_AJUSTAR_HORA);
                         break;
@@ -306,7 +324,7 @@ void menu_update(void)
                 switch (campo_ajuste) {
                     case 0: h_temp = (h_temp + 1) % 24; break;
                     case 1: m_temp = (m_temp + 1) % 60; break;
-                    case 2: s_temp = (s_temp + 1) % 60; break;
+                    
                     default: break;
                 }
                 pantalla_sucia = 1;
@@ -316,18 +334,18 @@ void menu_update(void)
                 switch (campo_ajuste) {
                     case 0: h_temp = (h_temp == 0) ? 23 : h_temp - 1; break;
                     case 1: m_temp = (m_temp == 0) ? 59 : m_temp - 1; break;
-                    case 2: s_temp = (s_temp == 0) ? 59 : s_temp - 1; break;
+                    
                     default: break;
                 }
                 pantalla_sucia = 1;
             }
             if (sel) {
                 campo_ajuste++;
-                if (campo_ajuste > 2) {
+                if (campo_ajuste > 1) {
                     /* Se terminaron los 3 campos: guardar y volver al reloj */
                     Hora_actual.horas = h_temp;
                     Hora_actual.minutos = m_temp;
-                    Hora_actual.segundos = s_temp;
+                    Hora_actual.segundos = 0;
                     seg_anterior = 0xFF;   /* forzar redibujo del reloj */
                     cambiar_estado(EST_RELOJ);
                 } else {

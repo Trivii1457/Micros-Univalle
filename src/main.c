@@ -14,7 +14,7 @@ int main(void) {
     lcd_set_cursor(1, 1);
     lcd_printf("   Reloj Digital    ");
     Botones_Init();
-    ADC_init();
+    sensores_init();
     Reloj_Init(0,0,0);
     menu_init();
     lcd_set_cursor(1, 1);

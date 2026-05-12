@@ -8,12 +8,12 @@
 
 /*Voy a tratar de utilizar un sensor DHT11 y un fotoresistor*/
 
-#define puerto_sensores 'C'
-#define sensor_temp 2
+#define puerto_sensores 'D'
+#define sensor_temp 1
 
 #define Canal_LDR 2 //PA2
 
-void ADC_init(void);
+void sensores_init(void);
 
 uint16_t LDR_read(void);
 

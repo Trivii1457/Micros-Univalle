@@ -4,30 +4,22 @@
 
 #include "sensores.h"
 #include "../lib/gpio.h"
+#include "../lib/adc.h"
 
-
-void ADC_init(void){
-    //AVcc con capacitor en AREF
-    ADMUX = (1<<REFS0);
-    //Prescaler 128 -> 16MHz/128 = 125KHz
-    ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1);
-
-    ADCSRA |= (1 << ADSC);
-    while (ADCSRA & (1 << ADSC));
+void sensores_init(void){
+    //Inicializa el ADC usando la nueva abstraccion HAL_ADC
+    hal_adc_config_t adc_cfg;
+    adc_cfg.reference = HAL_ADC_REF_AVCC;
+    adc_cfg.prescaler = HAL_ADC_PRESCALER_128; //125KHz para 16MHz
+    adc_cfg.vref_mv = 5000;
+    HAL_ADC_Init(&adc_cfg);
 }
 
-
 uint16_t LDR_read(void){
-    //Selecciono el canal del LDR
-    ADMUX = (ADMUX & 0xE0) | (Canal_LDR & 0x1F);
-
-    //Inicio la conversion
-    ADCSRA |= (1 << ADSC);
-    //Espero a que termine
-    while (ADCSRA & (1 << ADSC));
-
-    //Leo el resultado
-    return ADC;
+    uint16_t valor_adc = 0;
+    //Lee el canal 2, donde esta el LDR (segun define Canal_LDR 2)
+    HAL_ADC_Read(Canal_LDR, &valor_adc);
+    return valor_adc;
 }
 
 static uint8_t esperar_estado(uint8_t estado, uint8_t max_us) {

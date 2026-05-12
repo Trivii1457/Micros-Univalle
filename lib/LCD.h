@@ -21,8 +21,8 @@
 /* DEFINIR EL PUERTO DONDE SE VA CONECTAR LA LCD                        */
 /************************************************************************/
 
-#define _LCD_DDR(x, y)    GPIO_PIN_MODE_PORTA(x, y) 
-#define _LCD_PORT(x,y)    GPIO_WRITE_PORTA(x, y)
+#define _LCD_DDR(x, y)    GPIO_PIN_MODE_PORTB(x, y) 
+#define _LCD_PORT(x,y)    GPIO_WRITE_PORTB(x, y)
 
 #define _LCD_RS 0
 #define _LCD_EN 1

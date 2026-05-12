@@ -12,8 +12,7 @@ uint8_t indice_siguiente = 0;
 
 
 
-//Varriabkes internas
-static uint8_t ms_contador = 0;
+static uint16_t ms_contador = 0;
 static uint8_t muestra_pendiente = 0;
 
 void Reloj_Init(uint8_t horas, uint8_t minutos, uint8_t segundos){
@@ -36,16 +35,24 @@ void ajustar_reloj(uint8_t horas, uint8_t minutos, uint8_t segundos){
 void tick_reloj(void){
     ms_contador++;
     
-    if (ms_contador < 1000) {
-        return; // No ha pasado un segundo completo
+    // 200 ticks de 5ms = 1000ms = 1 segundo en "tiempo real"
+    if (ms_contador < 200) {
+        return; 
     }
-    ms_contador = 0; // Reiniciar el contador de milisegundos
-    Hora_actual.segundos += 60;
+    ms_contador = 0;
+    
+    Hora_actual.segundos += 1;
     if (Hora_actual.segundos < 60) {
         return;
     }
     Hora_actual.segundos = 0;
-    Hora_actual.minutos += 5;
+    Hora_actual.minutos += 1; // 1 minuto real
+    
+    // Cada x intervalo, bandera de muestra
+    if (Hora_actual.minutos % intervalo == 0 && Hora_actual.segundos == 0) {
+        muestra_pendiente = 1;
+    }
+
     if (Hora_actual.minutos < 60) {
         return;
     }
@@ -55,7 +62,6 @@ void tick_reloj(void){
         return;
     }
     Hora_actual.horas = 0;
-
 }
 
 uint8_t muestra_pendiente_(void){
