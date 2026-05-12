@@ -75,14 +75,15 @@ static void dibujar_reloj(void)
 static void dibujar_menu(void)
 { 
     lcd_set_cursor(1, 1);
-    lcd_printf("   MENU PRINCIPAL   ");
+    lcd_puts("   MENU PRINCIPAL   ");
     for (uint8_t i = 0; i < Max_menu; i++) {
         lcd_set_cursor(2 + i, 1);
         if (i == cursor_menu) {
-            lcd_printf("> %s", opciones_menu[i]);
+            lcd_puts("> ");
         } else {
-            lcd_printf("  %s", opciones_menu[i]);
+            lcd_puts("  ");
         }
+        lcd_puts((char*)opciones_menu[i]);
     }
 }
 

@@ -12,13 +12,13 @@ int main(void) {
     lcd_init();
     lcd_disable_blink();
     lcd_set_cursor(1, 1);
-    lcd_printf("   Reloj Digital    ");
+    //lcd_printf("   Reloj Digital    ");
     Botones_Init();
     sensores_init();
     Reloj_Init(0,0,0);
     menu_init();
     lcd_set_cursor(1, 1);
-    lcd_puts("   Reloj Digital    ");
+    //lcd_puts("   Reloj Digital    ");
     lcd_clear();
     _delay_ms(2000);
     //while(1){tick_reloj;}
