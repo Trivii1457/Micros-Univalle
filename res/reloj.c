@@ -4,6 +4,7 @@
 
 #include "reloj.h"
 
+
 Tiempo Hora_actual = {0, 0, 0};
 Muestra muestras[Max_muestras];
 uint8_t numero_muestras = 0;
@@ -31,6 +32,7 @@ void ajustar_reloj(uint8_t horas, uint8_t minutos, uint8_t segundos){
     ms_contador = 0; // Reiniciar el contador de milisegundos al ajustar el reloj
 }
 
+//Tick del reloj, se debe llamar cada 5ms
 void tick_reloj(void){
     ms_contador++;
     
@@ -38,17 +40,17 @@ void tick_reloj(void){
         return; // No ha pasado un segundo completo
     }
     ms_contador = 0; // Reiniciar el contador de milisegundos
-    Hora_actual.segundos++;
+    Hora_actual.segundos += 60;
     if (Hora_actual.segundos < 60) {
         return;
     }
     Hora_actual.segundos = 0;
-    Hora_actual.minutos++;
+    Hora_actual.minutos += 5;
     if (Hora_actual.minutos < 60) {
         return;
     }
     Hora_actual.minutos = 0;
-    Hora_actual.horas++;
+    Hora_actual.horas += 1;
     if (Hora_actual.horas < 24) {
         return;
     }

@@ -1,7 +1,7 @@
 #include "menu.h"
 #include "botones.h"
 #include "reloj.h"
-#include "i2c.h"
+#include "../lib/LCD.h"
 #include "../lib/gpio.h"
 #include <stdio.h>
 

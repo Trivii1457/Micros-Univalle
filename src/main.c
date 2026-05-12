@@ -1,6 +1,6 @@
 #include "../lib/config.h"
 #include "../lib/gpio.h"
-#include "../res/i2c.h"
+#include "../lib/LCD.h"
 #include "../res/sensores.h"
 #include "../res/menu.h"
 #include "../res/botones.h"
@@ -13,7 +13,6 @@ int main(void) {
     lcd_disable_blink();
     lcd_set_cursor(1, 1);
     lcd_printf("   Reloj Digital    ");
-    /*
     Botones_Init();
     ADC_init();
     Reloj_Init(0,0,0);
@@ -21,11 +20,14 @@ int main(void) {
     lcd_set_cursor(1, 1);
     lcd_puts("   Reloj Digital    ");
     lcd_clear();
-    _delay_ms(2000);*/
+    _delay_ms(2000);
+    //while(1){tick_reloj;}
     
     while (1) {
-        /*
+        
         _delay_ms(5);
+        
+        
         tick_reloj(); 
         
         
@@ -42,7 +44,8 @@ int main(void) {
  
             guardar_muestra(temp, hum, ldr, dht_ok);
         }
-        menu_update();/*/
+        menu_update();
+        tick_reloj();
     }
 }
 
