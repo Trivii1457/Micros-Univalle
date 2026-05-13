@@ -32,19 +32,10 @@ int main(void) {
         
         
         if (muestra_pendiente_()) {
-            uint8_t  temp   = 0;
-            uint8_t  hum    = 0;
-            uint16_t ldr    = 0;
-            uint8_t  dht_ok = 0;
-            ldr = LDR_read();
+            uint16_t ldr = LDR_read();
+            uint16_t hw870 = HW870_read();
  
-            if (temp_read(&temp, &hum) == 1) {
-                dht_ok = 1; 
-            } else {
-                dht_ok = 0;
-            }
- 
-            guardar_muestra(temp, hum, ldr, dht_ok);
+            guardar_muestra(hw870, ldr);
         }
         menu_update();
         tick_reloj();

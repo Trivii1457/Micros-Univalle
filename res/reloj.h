@@ -24,11 +24,8 @@ typedef struct{
 
 typedef struct{
     Tiempo Hora;
-    uint8_t Temperatura;
-    uint8_t Humedad;
+    uint16_t HW870;
     uint16_t LDR;   
-    uint8_t lec_ok; //1 Si la lectura es correcta, 0 si no lo es
-
 } Muestra;
 
 
@@ -48,7 +45,7 @@ void ajustar_reloj(uint8_t horas, uint8_t minutos, uint8_t segundos);
 
 uint8_t muestra_pendiente_(void);
 
-void guardar_muestra(uint8_t temperatura, uint8_t humedad, uint16_t ldr, uint8_t lec_ok);
+void guardar_muestra(uint16_t hw870, uint16_t ldr);
 
 Muestra* obtener_muestras(uint8_t idx);
 

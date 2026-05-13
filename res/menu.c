@@ -9,26 +9,24 @@
 typedef enum {
     EST_RELOJ,
     EST_MENU,
-    EST_VER_DHT,
+    EST_VER_HW870,
     EST_VER_LDR,
-    EST_AJUSTAR_HORA,
 } MenuState;
 
 static MenuState estado = EST_RELOJ;
 static uint8_t pantalla_sucia = 1; //Cuando la pantalla necesite ser actualizada
 static uint8_t cursor_menu = 0; 
 static uint8_t indice_vista = 0;
-
+/*
 static uint8_t h_temp, m_temp; 
 static uint8_t campo_ajuste = 0; //0=horas, 1=minutos, 2=segundos
-
+*/
 static uint8_t seg_anterior = 0xFF;
 
-#define Max_menu 3
+#define Max_menu 2
 static const char *opciones_menu[Max_menu] = {
-    "1. Ver DHT11",
-    "2. Ver LDR",
-    "3. Ajustar hora"
+    "1. Ver HW-870",
+    "2. Ver LDR"
 };
 
 static void cambiar_estado(MenuState nuevo_estado) {
@@ -51,7 +49,7 @@ static void dibujar_digito_grande(uint8_t digito, uint8_t offset_col) {
 static void dibujar_reloj(void)
 {
    
-
+    //formatear la hora actual en 4 digitos grandes
     uint8_t h1 = Hora_actual.horas / 10;
     uint8_t h2 = Hora_actual.horas % 10;
     uint8_t m1 = Hora_actual.minutos / 10;
@@ -85,7 +83,7 @@ static void dibujar_menu(void)
     }
 }
 
-static void dibujar_dht(void)
+static void dibujar_hw870(void)
 {
     Muestra *m;
 
@@ -93,7 +91,7 @@ static void dibujar_dht(void)
     if (numero_muestras == 0) {
         lcd_printf("No hay muestras");
     }
-    else {lcd_printf("DHT11 %d/%d [B]=menu ", indice_vista + 1, numero_muestras);}
+    else {lcd_printf("HW870 %d/%d [B]=menu ", indice_vista + 1, numero_muestras);}
 
     if (numero_muestras == 0)
     {
@@ -112,13 +110,14 @@ static void dibujar_dht(void)
     lcd_set_cursor(2, 1);
     lcd_printf("Hora: %02d:%02d      ", m->Hora.horas, m->Hora.minutos);
 
-    //Fila 3, Temperatura
+    //Fila 3, Valor HW870
     lcd_set_cursor(3, 1);
-    if (m->lec_ok) {
-        lcd_printf("Temp: %d %%   ", m->Temperatura);
-    } else {
-        lcd_printf("Temp: --- C Error so puto   ");
-    }
+    lcd_printf("Val: %4d          ", m->HW870);
+    
+    //Fila 4, Porcentaje
+    lcd_set_cursor(4, 1);
+    uint8_t pct = (m->HW870 * 100) / 1023;
+    lcd_printf("Nivel: %3d %%       ", pct);
 }
 
 //Pantalla de muestras de LDR
@@ -161,26 +160,6 @@ static void dibujar_ldr(void)
     lcd_printf("Luz: %3d %%   ", pct_luz);
 }
 
-
-static void dibujar_ajuste_hora(void)
-{
-    lcd_set_cursor(1, 1);
-    lcd_printf("  AJUSTAR HORA    ");
-
-    lcd_set_cursor(2, 1);
-    lcd_printf("Hora: %02d:%02d      ", h_temp, m_temp);
-
-    lcd_set_cursor(3, 1);
-    switch (campo_ajuste) {
-        case 0: lcd_printf("    ^^              "); break;   /* bajo las horas */
-        case 1: lcd_printf("         ^^         "); break;  /* bajo los minutos */
-        
-        default: break;
-    }
-    lcd_set_cursor(4, 1);
-    lcd_printf("[^][v]=cambiar[S]=OK");
-    
-}
 
 
 void  menu_init(void) 
@@ -250,17 +229,10 @@ void menu_update(void)
                 switch (cursor_menu)
                 {
                     case 0:
-                        cambiar_estado(EST_VER_DHT);
+                        cambiar_estado(EST_VER_HW870);
                         break;
                     case 1:
                         cambiar_estado(EST_VER_LDR);
-                        break;
-                    case 2:
-                        h_temp = Hora_actual.horas;
-                        m_temp = Hora_actual.minutos;
-                        
-                        campo_ajuste = 0;
-                        cambiar_estado(EST_AJUSTAR_HORA);
                         break;
                     default:
                         break;
@@ -275,7 +247,7 @@ void menu_update(void)
                 pantalla_sucia = 0;
             }
             break;
-        case EST_VER_DHT:
+        case EST_VER_HW870:
             if (arr && numero_muestras > 0) {
                 /* Muestra anterior */
                 if (indice_vista > 0) {
@@ -293,8 +265,8 @@ void menu_update(void)
             if (back || sel) {
                 cambiar_estado(EST_MENU);
             }
-            if (pantalla_sucia && estado == EST_VER_DHT) {
-                dibujar_dht();
+            if (pantalla_sucia && estado == EST_VER_HW870) {
+                dibujar_hw870();
                 pantalla_sucia = 0;
             }
             break;
@@ -321,49 +293,6 @@ void menu_update(void)
             }
             break;
 
-        case EST_AJUSTAR_HORA:
-            if (arr) {
-                /* Incrementar el campo activo */
-                switch (campo_ajuste) {
-                    case 0: h_temp = (h_temp + 1) % 24; break;
-                    case 1: m_temp = (m_temp + 1) % 60; break;
-                    
-                    default: break;
-                }
-                pantalla_sucia = 1;
-            }
-            if (abj) {
-                /* Decrementar el campo activo (con vuelta al maximo) */
-                switch (campo_ajuste) {
-                    case 0: h_temp = (h_temp == 0) ? 23 : h_temp - 1; break;
-                    case 1: m_temp = (m_temp == 0) ? 59 : m_temp - 1; break;
-                    
-                    default: break;
-                }
-                pantalla_sucia = 1;
-            }
-            if (sel) {
-                campo_ajuste++;
-                if (campo_ajuste > 1) {
-                    /* Se terminaron los 3 campos: guardar y volver al reloj */
-                    Hora_actual.horas = h_temp;
-                    Hora_actual.minutos = m_temp;
-                    Hora_actual.segundos = 0;
-                    seg_anterior = 0xFF;   /* forzar redibujo del reloj */
-                    cambiar_estado(EST_RELOJ);
-                } else {
-                    pantalla_sucia = 1;   /* pasar al siguiente campo */
-                }
-            }
-            if (back) {
-                /* Cancelar sin guardar */
-                cambiar_estado(EST_MENU);
-            }
-            if (pantalla_sucia && estado == EST_AJUSTAR_HORA) {
-                dibujar_ajuste_hora();
-                pantalla_sucia = 0;
-            }
-            break;
 
         default:
             cambiar_estado(EST_RELOJ);

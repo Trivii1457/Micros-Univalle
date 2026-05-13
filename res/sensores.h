@@ -6,19 +6,12 @@
 
 #include <stdint.h>
 
-/*Voy a tratar de utilizar un sensor DHT11 y un fotoresistor*/
-
-#define puerto_sensores 'A'
-#define sensor_temp 1
-
-#define Canal_LDR 2 //PA2
+#define Canal_HW870 1 // PA1
+#define Canal_LDR 2   // PA2
 
 void sensores_init(void);
 
 uint16_t LDR_read(void);
-
-uint8_t temp_read(uint8_t *temp, uint8_t *humidity);
-
-
+uint16_t HW870_read(void);
 
 #endif

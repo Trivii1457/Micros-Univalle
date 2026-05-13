@@ -6,7 +6,7 @@
 
 
 Tiempo Hora_actual = {0, 0, 0};
-Muestra muestras[Max_muestras];
+Muestra muestras[Max_muestras]; //vector circular de muestras
 uint8_t numero_muestras = 0;
 uint8_t indice_siguiente = 0;
 
@@ -35,7 +35,7 @@ void ajustar_reloj(uint8_t horas, uint8_t minutos, uint8_t segundos){
 void tick_reloj(void){
     ms_contador++;
     
-    // 200 ticks de 5ms = 1000ms = 1 segundo en "tiempo real"
+    
     if (ms_contador < 200) {
         return; 
     }
@@ -73,13 +73,11 @@ uint8_t muestra_pendiente_(void){
     }
 }
 
-void guardar_muestra(uint8_t temperatura, uint8_t humedad, uint16_t ldr, uint8_t lec_ok){
+void guardar_muestra(uint16_t hw870, uint16_t ldr){
     //Me las hecho al bolsillo
     muestras[indice_siguiente].Hora = Hora_actual;
-    muestras[indice_siguiente].Temperatura = temperatura;
-    muestras[indice_siguiente].Humedad = humedad;
+    muestras[indice_siguiente].HW870 = hw870;
     muestras[indice_siguiente].LDR = ldr;
-    muestras[indice_siguiente].lec_ok = lec_ok;
         
     indice_siguiente = (indice_siguiente + 1) % Max_muestras; // Avanzar al siguiente índice circularmente
     // Si el número de muestras es menor que el máximo, incrementarlo
