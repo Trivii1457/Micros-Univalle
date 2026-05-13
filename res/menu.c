@@ -50,9 +50,7 @@ static void dibujar_digito_grande(uint8_t digito, uint8_t offset_col) {
 
 static void dibujar_reloj(void)
 {
-    // Mostrar HH:MM ocupando 4 líneas.
-    // Espacio en cols: (3H) + (1 space) + (3H) + (2 colons) + (3M) + (1 space) + (3M) = 16 cols
-    // Restan 4 columnas: 2 a la izquierda, 2 a la derecha.
+   
 
     uint8_t h1 = Hora_actual.horas / 10;
     uint8_t h2 = Hora_actual.horas % 10;
@@ -267,6 +265,10 @@ void menu_update(void)
                     default:
                         break;
                 }
+            }
+            if (back)
+            {
+                cambiar_estado(EST_RELOJ);
             }
             if (pantalla_sucia && estado == EST_MENU) {
                 dibujar_menu();

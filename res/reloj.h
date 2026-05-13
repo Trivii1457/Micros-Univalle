@@ -14,7 +14,7 @@
 
 
 #define Max_muestras 5
-#define intervalo 5 //Esra representado por minutos en el reloj
+#define intervalo 1 //Esra representado por minutos en el reloj
 
 typedef struct{
     uint8_t horas;

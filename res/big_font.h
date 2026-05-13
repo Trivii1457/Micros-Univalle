@@ -46,12 +46,7 @@ static const uint8_t bf_bot_left[8] = {
     0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x0F, 0x07
 };
 
-/*
-    Mapeo de digitos:
-    Cada digito mide 3 de ancho por 4 de alto.
-    ' ' (32) = Espacio vacio.
-    0-7 = Los custom chars.
-*/
+
 
 static const uint8_t big_digits[10][4][3] = {
     // 0

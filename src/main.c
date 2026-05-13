@@ -38,8 +38,10 @@ int main(void) {
             uint8_t  dht_ok = 0;
             ldr = LDR_read();
  
-            if (temp_read(&temp, &hum) == 0) {
+            if (temp_read(&temp, &hum) == 1) {
                 dht_ok = 1; 
+            } else {
+                dht_ok = 0;
             }
  
             guardar_muestra(temp, hum, ldr, dht_ok);

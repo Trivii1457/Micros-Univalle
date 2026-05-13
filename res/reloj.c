@@ -94,9 +94,9 @@ Muestra* obtener_muestras(uint8_t idx){
     }
     uint8_t indice_real;
     if (numero_muestras < Max_muestras) {
-        indice_real = idx; // Si no se ha llenado el buffer, el índice real es el mismo que el índice solicitado
+        indice_real = idx; 
     } else {
-        indice_real = (indice_siguiente + idx) % Max_muestras; // Calcular el índice real en el buffer circular
+        indice_real = (indice_siguiente + idx) % Max_muestras; 
     }
     return &muestras[indice_real];
 }
